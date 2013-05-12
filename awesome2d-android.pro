@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,9 +13,15 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    aw2dglwidget.cpp \
+    sprite.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    aw2dglwidget.h \
+    camera2d.hpp \
+    sprite.h \
+    aw2dmath.h
 
 FORMS    += mainwindow.ui
 
@@ -56,4 +62,10 @@ OTHER_FILES += \
     android/src/org/kde/necessitas/origo/QtActivity.java \
     android/src/org/kde/necessitas/origo/QtApplication.java \
     android/version.xml
+
+deployment.files=demo_data/sprites/spacestation-03-sw_diffuse_0.png demo_data/sprites/spacestation-03-sw_normal_0.png demo_data/sprites/spacestation-03-sw_offset_0.png
+android {
+    deployment.path=/assets/demo_data/sprites
+}
+INSTALLS += deployment
 
