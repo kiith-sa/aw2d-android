@@ -16,13 +16,11 @@
 #include "sprite.h"
 
 
-//TODO onPause/onStop: stop redrawing stuff
+//TODO Let Qt handle redraws.
 //TODO Add a separate sprite drawing function.
 //TODO FPS counter. Use QGLWidget text drawing API.
 //TODO move lights with touchscreen
 //TODO Move sprite
-//TODO onDestroy - isFinishing? If no, make sure we restore any state needed on onCreate
-//     (currently none)
 
 //TODO full sprite parsing; use http://yaml-online-parser.appspot.com/ to convert YAML to JSON
 
