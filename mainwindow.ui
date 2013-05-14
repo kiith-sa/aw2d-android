@@ -23,16 +23,20 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>TextLabel</string>
-      </property>
-     </widget>
+     <widget class="AW2DGLWidget" name="glWidget" native="true"/>
     </item>
    </layout>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>AW2DGLWidget</class>
+   <extends>QWidget</extends>
+   <header>aw2dglwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
