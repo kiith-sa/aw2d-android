@@ -1,0 +1,26 @@
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes.dex : \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes/org/kde/necessitas/example/awesome2d_android/R$attr.class \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes/org/kde/necessitas/example/awesome2d_android/R$array.class \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes/org/kde/necessitas/example/awesome2d_android/R$layout.class \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes/org/kde/necessitas/example/awesome2d_android/R$drawable.class \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes/org/kde/necessitas/example/awesome2d_android/R$string.class \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes/org/kde/necessitas/example/awesome2d_android/R.class \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes/org/kde/necessitas/example/awesome2d_android/BuildConfig.class \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes/org/kde/necessitas/ministro/IMinistro.class \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes/org/kde/necessitas/ministro/IMinistroCallback$Stub.class \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes/org/kde/necessitas/ministro/IMinistroCallback$Stub$Proxy.class \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes/org/kde/necessitas/ministro/IMinistroCallback.class \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes/org/kde/necessitas/ministro/IMinistro$Stub$Proxy.class \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes/org/kde/necessitas/ministro/IMinistro$Stub.class \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes/org/kde/necessitas/origo/QtActivity$3.class \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes/org/kde/necessitas/origo/QtApplication.class \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes/org/kde/necessitas/origo/QtActivity$6.class \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes/org/kde/necessitas/origo/QtActivity$3$1.class \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes/org/kde/necessitas/origo/QtActivity$5.class \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes/org/kde/necessitas/origo/QtActivity$1.class \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes/org/kde/necessitas/origo/QtActivity$2.class \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes/org/kde/necessitas/origo/QtActivity$3$1$1.class \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes/org/kde/necessitas/origo/QtApplication$InvokeResult.class \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes/org/kde/necessitas/origo/QtActivity.class \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/classes/org/kde/necessitas/origo/QtActivity$4.class \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/dexedLibs/annotations-91e03b759a24859dd36686d040cb52b2.jar \
