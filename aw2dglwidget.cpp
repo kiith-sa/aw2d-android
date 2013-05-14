@@ -1,7 +1,9 @@
 #include "aw2dglwidget.h"
 
 
+#include <QPainter>
 #include <QtOpenGL>
+
 #include <cmath>
 
 AW2DGLWidget::AW2DGLWidget(QWidget* parent)
@@ -16,6 +18,8 @@ AW2DGLWidget::AW2DGLWidget(QWidget* parent)
           ),
           parent
       )
+    , fps_(-1.0f)
+    , framesSinceFPSUpdate_(0)
     , camera_()
     , testSprite_("spacestation-03-sw", QVector3D(-267.132, -267.132, -267.132),
                   QVector3D(267.132, 267.132, 267.132), *this)
@@ -23,9 +27,12 @@ AW2DGLWidget::AW2DGLWidget(QWidget* parent)
     , shaderProgram_()
 {
     setAutoBufferSwap(false);
-    timer_ = new QTimer(this);
-    timer_->start(40);
-    connect(timer_,SIGNAL(timeout()),this,SLOT(repaint()));
+    renderTimer_ = new QTimer(this);
+    // Caps us to at most 500 FPS.
+    renderTimer_->start(2);
+    connect(renderTimer_,SIGNAL(timeout()), this, SLOT(update()));
+
+    setAutoFillBackground(false);
 
     // Dummy parameters, will be set in resizeGL().
     camera_.viewportSize(QVector2D(640, 480));
@@ -200,9 +207,9 @@ AW2DGLWidget::AW2DGLWidget(QWidget* parent)
     // Bind to get uniform locations
     shaderProgram_.bind();
 
-    attributePosition_       = shaderProgram_.attributeLocation("Position");
-    attributeTexCoord_       = shaderProgram_.attributeLocation("TexCoord");
-    if(attributePosition_       == -1 || attributeTexCoord_       == -1)
+    attributePosition_ = shaderProgram_.attributeLocation("Position");
+    attributeTexCoord_ = shaderProgram_.attributeLocation("TexCoord");
+    if(attributePosition_  == -1 || attributeTexCoord_ == -1)
     {
         qDebug() << "Failed to get vertex attribute handles; maybe an error in shader?";
         qDebug() << shaderProgram_.log();
@@ -221,6 +228,8 @@ AW2DGLWidget::AW2DGLWidget(QWidget* parent)
         return;
     }
     shaderProgram_.release();
+
+    fpsTimer_.start();
 }
 
 AW2DGLWidget::~AW2DGLWidget()
@@ -228,20 +237,9 @@ AW2DGLWidget::~AW2DGLWidget()
     delete lightingUniforms_;
 }
 
-void AW2DGLWidget::repaint()
-{
-    makeCurrent();
-    swapBuffers();
-    paintGL();
-}
-
 void AW2DGLWidget::initializeGL()
 {
     if(initFailed_){return;}
-    qglClearColor(QColor(255, 0, 0));
-    glEnable(GL_TEXTURE_2D);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
 
     lightingUniforms_->setAmbientLight(QVector3D(0.0, 0.0, 0.2));
 
@@ -270,6 +268,12 @@ void AW2DGLWidget::initializeGL()
 
 void AW2DGLWidget::paintGL()
 {
+    qglClearColor(QColor(255, 0, 0));
+    glEnable(GL_TEXTURE_2D);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+
+    // In case of bugs, call makeCurrent() (not calling it because overhead). 
     if(initFailed_)
     {
         // Blue signals broken GL (BSOD)
@@ -288,6 +292,29 @@ void AW2DGLWidget::resizeGL(int w, int h)
     glViewport(0, 0, w, h);
     camera_.viewportSize(QVector2D(w, h));
     camera_.center(QVector2D(0, 0));
+}
+
+void AW2DGLWidget::paintEvent(QPaintEvent* paintEvent)
+{
+    QGLWidget::paintEvent(paintEvent);
+
+    QPainter painter(this);
+    QPen pen(QColor(Qt::black));
+    pen.setWidth(2);
+    painter.setPen(pen);
+    painter.setFont(QFont("Sans", 16, QFont::Black));
+    painter.drawText(QRect(0, 48, width(), height()),
+                     Qt::AlignTop | Qt::AlignHCenter, "FPS: " + QString::number(fps_));
+    swapBuffers();
+
+    ++framesSinceFPSUpdate_;
+    const double secondsSinceFPSUpdate = fpsTimer_.nsecsElapsed() / 1000000000.0;
+    if(secondsSinceFPSUpdate > 1.0)
+    {
+        fps_ = framesSinceFPSUpdate_ / secondsSinceFPSUpdate;
+        framesSinceFPSUpdate_ = 0;
+        fpsTimer_.restart();
+    }
 }
 
 void AW2DGLWidget::drawScene()

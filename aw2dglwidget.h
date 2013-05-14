@@ -6,6 +6,7 @@
 #include <QGLFunctions>
 #include <QGLWidget>
 #include <QImage>
+#include <QElapsedTimer>
 #include <QTimer>
 #include <QGLShaderProgram>
 
@@ -16,9 +17,7 @@
 #include "sprite.h"
 
 
-//TODO Let Qt handle redraws.
 //TODO Add a separate sprite drawing function.
-//TODO FPS counter. Use QGLWidget text drawing API.
 //TODO move lights with touchscreen
 //TODO Move sprite
 
@@ -46,15 +45,24 @@ protected:
 
     void resizeGL(int w, int h);
 
+    void paintEvent(QPaintEvent* paintEvent);
+
 signals:
 
 private slots:
-    /// Trigger a repaint (new frame).
-    void repaint();
 
 private:
     /// When this times out, a new frame is started.
-    QTimer* timer_;
+    QTimer* renderTimer_;
+
+    /// Used to determine time taken by a frame with high precision (nanoseconds).
+    QElapsedTimer fpsTimer_;
+
+    /// FPS (1.0 / frametime) averaged over the last second (-1 at startup).
+    double fps_;
+
+    /// How many frames have been rendered since the last FPS update?
+    unsigned framesSinceFPSUpdate_;
 
     /// Camera used to view the scene.
     Camera2D camera_;
