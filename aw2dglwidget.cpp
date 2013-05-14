@@ -331,40 +331,48 @@ void AW2DGLWidget::drawScene()
     // Draw the test sprite.
     if(testSprite_.isValid())
     {
-        lightingUniforms_->setSpriteBounds(testSprite_.boundsMin(), testSprite_.boundsMax());
-        lightingUniforms_->setSpritePosition(QVector3D(0, 0, 0));
-        lightingUniforms_->updateUniforms();
-
-        testSprite_.bind();
-        // Set texture units.
-        shaderProgram_.enableAttributeArray(attributePosition_);
-        shaderProgram_.enableAttributeArray(attributeTexCoord_);
-
-        // Create vertex data to draw the sprite with.
-        // This should be part of a sprite page later.
-        QVector<QVector2D> positions;
-        QVector<QVector2D> texCoords;
-
-        // Align to pixel boundaries.
-        const QVector2D size = testSprite_.pixelSize();
-        const float xMin = static_cast<int>(-size.x() / 2);
-        const float yMin = static_cast<int>(-size.y() / 2);
-        const float xMax = xMin + size.x();
-        const float yMax = yMin + size.y();
-
-        positions.append(QVector2D(xMin, yMin)); texCoords.append(QVector2D(0, 0));
-        positions.append(QVector2D(xMax, yMin)); texCoords.append(QVector2D(1, 0));
-        positions.append(QVector2D(xMax, yMax)); texCoords.append(QVector2D(1, 1));
-        positions.append(QVector2D(xMin, yMin)); texCoords.append(QVector2D(0, 0));
-        positions.append(QVector2D(xMax, yMax)); texCoords.append(QVector2D(1, 1));
-        positions.append(QVector2D(xMin, yMax)); texCoords.append(QVector2D(0, 1));
-
-        shaderProgram_.setAttributeArray(attributePosition_, positions.constData());
-        shaderProgram_.setAttributeArray(attributeTexCoord_, texCoords.constData());
-        glDrawArrays(GL_TRIANGLES, 0, positions.size());
-
-        shaderProgram_.disableAttributeArray(attributeTexCoord_);
-        shaderProgram_.disableAttributeArray(attributePosition_);
+        for(int i = 0; i < 8; ++i)
+        {
+            drawSprite(&testSprite_, QVector3D(72 + 144 * (i - 4), 256 * (i % 2), 0));
+        }
     }
     shaderProgram_.release();
+}
+
+void AW2DGLWidget::drawSprite(Sprite* sprite, const QVector3D& position)
+{
+    lightingUniforms_->setSpriteBounds(sprite->boundsMin(), sprite->boundsMax());
+    lightingUniforms_->setSpritePosition(position);
+    lightingUniforms_->updateUniforms();
+
+    sprite->bind();
+    // Set texture units.
+    shaderProgram_.enableAttributeArray(attributePosition_);
+    shaderProgram_.enableAttributeArray(attributeTexCoord_);
+
+    // Create vertex data to draw the sprite with.
+    // This should be part of a sprite page later.
+    QVector<QVector2D> positions;
+    QVector<QVector2D> texCoords;
+
+    // Align to pixel boundaries.
+    const QVector2D size = sprite->pixelSize();
+    const float xMin = static_cast<int>(-size.x() / 2);
+    const float yMin = static_cast<int>(-size.y() / 2);
+    const float xMax = xMin + size.x();
+    const float yMax = yMin + size.y();
+
+    positions.append(QVector2D(xMin, yMin)); texCoords.append(QVector2D(0, 0));
+    positions.append(QVector2D(xMax, yMin)); texCoords.append(QVector2D(1, 0));
+    positions.append(QVector2D(xMax, yMax)); texCoords.append(QVector2D(1, 1));
+    positions.append(QVector2D(xMin, yMin)); texCoords.append(QVector2D(0, 0));
+    positions.append(QVector2D(xMax, yMax)); texCoords.append(QVector2D(1, 1));
+    positions.append(QVector2D(xMin, yMax)); texCoords.append(QVector2D(0, 1));
+
+    shaderProgram_.setAttributeArray(attributePosition_, positions.constData());
+    shaderProgram_.setAttributeArray(attributeTexCoord_, texCoords.constData());
+    glDrawArrays(GL_TRIANGLES, 0, positions.size());
+
+    shaderProgram_.disableAttributeArray(attributeTexCoord_);
+    shaderProgram_.disableAttributeArray(attributePosition_);
 }

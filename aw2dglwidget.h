@@ -17,7 +17,6 @@
 #include "sprite.h"
 
 
-//TODO Add a separate sprite drawing function.
 //TODO move lights with touchscreen
 //TODO Move sprite
 
@@ -88,6 +87,14 @@ private:
 
     /// Draw all 3D-lit sprites.
     void drawScene();
+
+    /// Draw a 3D-lit sprite.
+    ///
+    /// Must be called while shaderProgram_ is bound.
+    ///
+    /// @param sprite   Sprite to draw.
+    /// @param position Position in 3D world space to draw at.
+    void drawSprite(Sprite* sprite, const QVector3D& position);
 };
 
 #endif // AW2DGLWIDGET_H
