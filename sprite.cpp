@@ -1,10 +1,14 @@
 #include "sprite.h"
 #include "aw2dmath.h"
 
-Sprite::Sprite(const QString& name, QGLWidget& glWidget)
+Sprite::Sprite(const QString& name, const QVector3D& boundsMin, const QVector3D& boundsMax, 
+               QGLWidget& glWidget)
    : imageDiffuse_("assets:/demo_data/sprites/" + name + "_diffuse_0.png")
    , imageNormal_("assets:/demo_data/sprites/" + name + "_normal_0.png")
    , imageOffset_("assets:/demo_data/sprites/" + name + "_offset_0.png")
+   , boundsMin_(boundsMin)
+   , boundsMax_(boundsMax)
+   , pixelSize_(QVector2D(0.0f, 0.0f))
    , valid_(false)
    , creatorWidget_(glWidget)
 {
@@ -32,6 +36,9 @@ Sprite::Sprite(const QString& name, QGLWidget& glWidget)
         qDebug() << "Image sizes in sprite " << name << " don't match";
         return;
     }
+
+    pixelSize_ = QVector2D(imageDiffuse_.size().width(), imageDiffuse_.size().height());
+
     // Image sizes must be powers of two
     if(!isPowerOfTwo(imageDiffuse_.size().width()) ||
        !isPowerOfTwo(imageDiffuse_.size().height()))

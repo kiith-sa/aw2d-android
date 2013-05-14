@@ -5,6 +5,8 @@
 #include <QGLContext>
 #include <QtOpenGL>
 #include <QImage>
+#include <QVector2D>
+#include <QVector3D>
 
 
 /// A simple 2D sprite with lighting support.
@@ -27,6 +29,15 @@ private:
     /// Offset layer texture.
     GLuint textureOffset_;
 
+    /// Minimum 3D bounds of the sprite (for offsets).
+    QVector3D boundsMin_;
+
+    /// Maximum 3D bounds of the sprite (for offsets).
+    QVector3D boundsMax_;
+
+    /// Size of the sprite in pixels.
+    QVector2D pixelSize_;
+
     /// Is this sprite valid (i.e. did loading succeed?)
     bool valid_;
 
@@ -36,10 +47,13 @@ private:
 public:
     /// Load a sprite.
     ///
-    /// @param name     Base name of sprite layer images in 'demo_data/sprites/'.
-    /// @param glWidget GL widget to create textures with. The sprite MUST be destroyed before
-    ///                 this GL widget.
-    Sprite(const QString& name, QGLWidget& glWidget);
+    /// @param name      Base name of sprite layer images in 'demo_data/sprites/'.
+    /// @param boundsMin Minimum 3D bounds of the sprite (for offsets).
+    /// @param boundsMax Maximum 3D bounds of the sprite (for offsets).
+    /// @param glWidget  GL widget to create textures with. The sprite MUST be destroyed before
+    ///                  this GL widget.
+    Sprite(const QString& name, const QVector3D& boundsMin, const QVector3D& boundsMax,
+           QGLWidget& glWidget);
 
     /// Destroy the sprite.
     ~Sprite()
@@ -51,6 +65,15 @@ public:
 
     /// Is the sprite valid; i.e. has it been succesfully loaded?
     bool isValid() const {return valid_;}
+
+    /// Get minimum 3D bounds of the sprite (for offsets).
+    QVector3D boundsMin() const {return boundsMin_;}
+
+    /// Get maximum 3D bounds of the sprite (for offsets).
+    QVector3D boundsMax() const {return boundsMax_;}
+
+    /// Get the size of the sprite in pixels.
+    QVector2D pixelSize() const {return pixelSize_;}
 
     /// Bind the sprite. 
     ///
