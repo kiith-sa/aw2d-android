@@ -98,7 +98,7 @@ public:
     {
         Q_ASSERT_X(index < maxDirectionalLights, "LightingUniforms::setDirectionalLight",
                    "Directional light index out of range");
-        directionalDirections_.setValue(light.direction(), index);
+        directionalDirections_.setValue(light.direction().normalized(), index);
         directionalDiffuse_.setValue(light.diffuse(), index);
     }
 
