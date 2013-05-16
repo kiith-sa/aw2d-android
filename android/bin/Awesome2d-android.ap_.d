@@ -35,5 +35,8 @@
 /home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/assets/demo_data/sprites \
 /home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/assets/demo_data/sprites/spacestation-03-sw_diffuse_0.png \
 /home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/assets/demo_data/sprites/spacestation-03-sw_normal_0.png \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/assets/demo_data/sprites/sphere_normal_0.png \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/assets/demo_data/sprites/sphere_diffuse_0.png \
 /home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/assets/demo_data/sprites/spacestation-03-sw_offset_0.png \
+/home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/assets/demo_data/sprites/sphere_offset_0.png \
 /home/kiith-sa/Programming/AW2D-Android/awesome2d-android/android/bin/AndroidManifest.xml \
