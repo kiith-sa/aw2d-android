@@ -7,6 +7,7 @@
 #include <QGLWidget>
 #include <QImage>
 #include <QElapsedTimer>
+#include <QEvent>
 #include <QTimer>
 #include <QGLShaderProgram>
 
@@ -17,10 +18,11 @@
 #include "sprite.h"
 
 
-//TODO move lights with touchscreen
-//TODO Move sprite
-
+//TODO ushort texcoords
+//TODO interleaved vattributes. Ensure at least 4-byte alignment
+//TODO Sprite pages (texture packing etc.)
 //TODO full sprite parsing; use http://yaml-online-parser.appspot.com/ to convert YAML to JSON
+//TODO map + benchmark from desktop
 
 
 /// This widget manages the GL viewport as well as the GL context used for all GL operations.
@@ -36,15 +38,17 @@ public:
 
     /// Destroy the GL widget, destoying the GL context and all graphics resources.
     ~AW2DGLWidget();
-    
+
+    virtual bool event(QEvent* event);
+
 protected:
-    void initializeGL();
+    virtual void initializeGL();
 
-    void paintGL();
+    virtual void paintGL();
 
-    void resizeGL(int w, int h);
+    virtual void resizeGL(int w, int h);
 
-    void paintEvent(QPaintEvent* paintEvent);
+    virtual void paintEvent(QPaintEvent* paintEvent);
 
 signals:
 
@@ -66,8 +70,20 @@ private:
     /// Camera used to view the scene.
     Camera2D camera_;
 
-    /// Sprite used for testing.
+    /// Sprite used for benchmarking.
     Sprite testSprite_;
+
+    /// Sprite used to display light sources.
+    Sprite lightSprite_;
+
+    /// Directional light (1) used for testing.
+    DirectionalLight directional1_;
+    /// Directional light (2) used for testing.
+    DirectionalLight directional2_;
+    /// Point light (1) used for testing.
+    PointLight point1_;
+    /// Point light (2) used for testing.
+    PointLight point2_;
 
     /// True if the initialization has failed.
     ///

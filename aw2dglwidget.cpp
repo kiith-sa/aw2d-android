@@ -2,6 +2,7 @@
 
 
 #include <QPainter>
+#include <QTouchEvent>
 #include <QtOpenGL>
 
 #include <cmath>
@@ -23,10 +24,14 @@ AW2DGLWidget::AW2DGLWidget(QWidget* parent)
     , camera_()
     , testSprite_("spacestation-03-sw", QVector3D(-267.132, -267.132, -267.132),
                   QVector3D(267.132, 267.132, 267.132), *this)
+    , lightSprite_("sphere", QVector3D(-11.36, -11.36, -11.36),
+                  QVector3D(11.36, 11.36, 11.36), *this)
     , initFailed_(false)
     , shaderProgram_()
 {
+    setAttribute(Qt::WA_AcceptTouchEvents);
     setAutoBufferSwap(false);
+
     renderTimer_ = new QTimer(this);
     // Caps us to at most 500 FPS.
     renderTimer_->start(2);
@@ -240,38 +245,66 @@ AW2DGLWidget::~AW2DGLWidget()
     delete lightingUniforms_;
 }
 
+
+bool AW2DGLWidget::event(QEvent* event)
+{
+    if(event->type() == QEvent::TouchBegin)
+    {
+        event->accept();
+        return true;
+    }
+    else if(event->type() == QEvent::TouchUpdate ||
+            event->type() == QEvent::TouchEnd)
+    {
+        QTouchEvent* touchEvent = dynamic_cast<QTouchEvent*>(event);
+        const QList<QTouchEvent::TouchPoint>& touchPoints = touchEvent->touchPoints();
+        unsigned touchCount = touchPoints.size();
+        QVector2D averageDelta;
+        foreach(const QTouchEvent::TouchPoint point, touchPoints)
+        {
+            averageDelta += QVector2D(point.pos() - point.lastPos());
+        }
+        averageDelta *= (1.0 / touchCount);
+
+        if(touchCount == 1)
+        {
+            point1_.setPosition(point1_.position() + QVector3D(averageDelta));
+        }
+        else if(touchCount == 2)
+        {
+            point2_.setPosition(point2_.position() + QVector3D(averageDelta));
+        }
+        event->accept();
+        return true;
+    }
+
+    return QGLWidget::event(event);
+}
+
 void AW2DGLWidget::initializeGL()
 {
     if(initFailed_){return;}
 
-    lightingUniforms_->setAmbientLight(QVector3D(0.0, 0.0, 0.2));
+    lightingUniforms_->setAmbientLight(QVector3D(0.0, 0.0, 0.1));
 
     // Set directional lights.
-    DirectionalLight directional1;
-    DirectionalLight directional2;
-    directional1.setDirection(QVector3D(0, 0, 0.5));
-    directional2.setDirection(QVector3D(0.5, 0, 0));
-    directional1.setDiffuse(QVector3D(0.5, 0, 0));
-    directional2.setDiffuse(QVector3D(0, 0.5, 0));
-    lightingUniforms_->setDirectionalLight(directional1, 0);
-    lightingUniforms_->setDirectionalLight(directional2, 1);
+    directional1_.setDirection(QVector3D(-0.1, -0.2, 0.7));
+    directional2_.setDirection(QVector3D(-0.5, 0, -0.1));
+    directional1_.setDiffuse(QVector3D(0.8, 0.7, 0.1));
+    directional2_.setDiffuse(QVector3D(0.1, 0.1, 0.6));
 
     // Set point lights.
-    PointLight point1;
-    PointLight point2;
-    point1.setPosition(QVector3D(0, 0, 0));
-    point2.setPosition(QVector3D(-128, -128, 128));
-    point1.setDiffuse(QVector3D(1, 1, 0));
-    point2.setDiffuse(QVector3D(0, 1, 1));
-    point1.setAttenuation(0.5f);
-    point2.setAttenuation(0.3f);
-    lightingUniforms_->setPointLight(point1, 0);
-    lightingUniforms_->setPointLight(point2, 1);
+    point1_.setPosition(QVector3D(0, 0, 0));
+    point2_.setPosition(QVector3D(-128, -128, 128));
+    point1_.setDiffuse(QVector3D(1, 1, 0));
+    point2_.setDiffuse(QVector3D(0, 1, 1));
+    point1_.setAttenuation(0.2f);
+    point2_.setAttenuation(0.1f);
 }
 
 void AW2DGLWidget::paintGL()
 {
-    qglClearColor(QColor(255, 0, 0));
+    qglClearColor(QColor(16, 16, 16));
     glEnable(GL_TEXTURE_2D);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
@@ -301,8 +334,9 @@ void AW2DGLWidget::paintEvent(QPaintEvent* paintEvent)
 {
     QGLWidget::paintEvent(paintEvent);
 
+    // Show FPS
     QPainter painter(this);
-    QPen pen(QColor(Qt::black));
+    QPen pen(QColor(Qt::red));
     pen.setWidth(2);
     painter.setPen(pen);
     painter.setFont(QFont("Sans", 16, QFont::Black));
@@ -322,6 +356,11 @@ void AW2DGLWidget::paintEvent(QPaintEvent* paintEvent)
 
 void AW2DGLWidget::drawScene()
 {
+    lightingUniforms_->setDirectionalLight(directional1_, 0);
+    lightingUniforms_->setDirectionalLight(directional2_, 1);
+    lightingUniforms_->setPointLight(point1_, 0);
+    lightingUniforms_->setPointLight(point2_, 1);
+
     shaderProgram_.bind();
     lightingUniforms_->reset();
 
@@ -338,6 +377,11 @@ void AW2DGLWidget::drawScene()
         {
             drawSprite(&testSprite_, QVector3D(72 + 144 * (i - 4), 256 * (i % 2), 0));
         }
+    }
+    if(lightSprite_.isValid())
+    {
+        drawSprite(&lightSprite_, point1_.position());
+        drawSprite(&lightSprite_, point2_.position());
     }
     shaderProgram_.release();
 }
