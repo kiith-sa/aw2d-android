@@ -264,7 +264,13 @@ OTHER_FILES += \
     android/src/org/kde/necessitas/origo/QtApplication.java \
     android/version.xml
 
-deployment.files=demo_data/sprites/spacestation-03-sw_diffuse_0.png demo_data/sprites/spacestation-03-sw_normal_0.png demo_data/sprites/spacestation-03-sw_offset_0.png
+deployment.files=demo_data/sprites/spacestation-03-sw_diffuse_0.png \
+                 demo_data/sprites/spacestation-03-sw_normal_0.png \
+                 demo_data/sprites/spacestation-03-sw_offset_0.png \
+                 demo_data/sprites/sphere_diffuse_0.png \
+                 demo_data/sprites/sphere_normal_0.png \
+                 demo_data/sprites/sphere_offset_0.png
+
 android {
     deployment.path=/assets/demo_data/sprites
 }
